@@ -5,7 +5,7 @@ const { JWT_SECRET } = require("../config/config");
 
 const registerNewUser = async (req, res) => {
   try {
-    const { name, email, gender, mobile, password } = req.body;
+    const { name, email, gender, mobile, password,monthlyBudget } = req.body;
 
     if (!name || !email || !password || !mobile || !gender) {
       return res
@@ -28,6 +28,8 @@ const registerNewUser = async (req, res) => {
       mobile,
       gender,
       password: hashedPassword,
+      isOnboarded:true,
+      monthlyBudget: monthlyBudget || 0, 
     });
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, {
