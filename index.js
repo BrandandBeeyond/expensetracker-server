@@ -3,6 +3,7 @@ const { PORT } = require("./config/config");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./routes/user.route");
 const connectTodb = require("./dbconnection");
+const cors = require('cors');
 
 const app = express();
 
@@ -14,6 +15,7 @@ connectTodb();
 app.use(express.json());
 app.use(express.urlencoded({urlencoded:true}));
 app.use(cookieParser());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send(`<center><h1>Server is Started...</h1></center>`);
