@@ -13,8 +13,7 @@ const registerNewUser = async (req, res) => {
         .json({ success: false, message: "Please enter all required fields" });
     }
 
-    const existingUser = await User.findOne({ email });
-
+    const existingUser = await User.findOne({email:email})
     if (existingUser) {
       return res
         .status(400)
