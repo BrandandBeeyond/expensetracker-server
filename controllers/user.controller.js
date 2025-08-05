@@ -1,6 +1,6 @@
 const User = require("../models/User.model");
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config/config");
 
 const registerNewUser = async (req, res) => {
@@ -13,7 +13,7 @@ const registerNewUser = async (req, res) => {
         .json({ success: false, message: "Please enter all required fields" });
     }
 
-    const existingUser = await User.findOne({email:email})
+    const existingUser = await User.findOne({ email: email });
     if (existingUser) {
       return res
         .status(400)
@@ -47,6 +47,54 @@ const registerNewUser = async (req, res) => {
     });
   }
 };
+
+const loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ success: false, message: "email and password are required" });
+    }
+
+    const user = await User.findOne({ email }).select("+password");
+    if (!user) {
+      console.log("User not found with email:", email);
+      return res
+        .status(404)
+        .json({ success: false, message: "Invalid credentials" });
+    }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      console.log("Password did not match for email:", email);
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid password" });
+    }
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({
+      success: true,
+      user,
+      token,
+      message:'login success'
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "login failed",
+      error: error.message,
+    });
+  }
+};
+
+
 const checkUserExists = async (req, res) => {
   try {
     const { email } = req.body;
@@ -81,4 +129,5 @@ const checkUserExists = async (req, res) => {
 module.exports = {
   registerNewUser,
   checkUserExists,
+  loginUser,
 };
