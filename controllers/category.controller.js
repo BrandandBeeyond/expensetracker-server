@@ -6,8 +6,6 @@ const addCategory = async (req, res) => {
     const { name, categoryType } = req.body;
 
 
-    
-
     if (!name || !categoryType) {
       return res
         .status(400)
