@@ -51,4 +51,15 @@ const addCategory = async (req, res) => {
 };
 
 
-module.exports = {addCategory}
+const getAllCategories = async (req, res) => {
+  try {
+    const categories = await Category.find();
+    res.status(200).json({ success: true, categories });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+module.exports = {addCategory,getAllCategories}
