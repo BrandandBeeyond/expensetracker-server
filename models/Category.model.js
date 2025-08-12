@@ -15,9 +15,34 @@ const categorySchema = new mongoose.Schema({
       required: [true, "Please upload a icon image"],
     },
   },
+
+  transactionType: {
+    type: String,
+    enum: ["Expense", "Income", "Transfer"],
+    required: true,
+  },
+
   categoryType: {
     type: String,
-    enum: ["Basic", "Enjoyment", "Healthcare", "Others"],
+    enum: [
+      // Expense categories
+      "Basic",
+      "Enjoyment",
+      "Healthcare",
+      "Others",
+
+      // Income categories
+      "Salary",
+      "Business",
+      "Investments",
+      "Gifts",
+
+      // Transfer categories
+      "Bank Transfer",
+      "Wallet Transfer",
+      "Credit Card Payment",
+    ],
+    required: true,
   },
 });
 
