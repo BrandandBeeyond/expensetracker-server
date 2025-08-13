@@ -3,13 +3,12 @@ const Cloudinary = require("cloudinary");
 
 const addCategory = async (req, res) => {
   try {
-    const { name, categoryType } = req.body;
+    const { name, categoryType, transactionType, parentCategory } = req.body;
 
-
-    if (!name || !categoryType) {
+    if (!name || !categoryType || !transactionType || !parentCategory) {
       return res
         .status(400)
-        .json({ success: false, message: "Enter name and category type" });
+        .json({ success: false, message: "Enter required details" });
     }
 
     if (!req.files || !req.files.icon) {
@@ -38,6 +37,8 @@ const addCategory = async (req, res) => {
         url: iconResult.secure_url,
       },
       categoryType: categoryType,
+      transactionType: transactionType,
+      parentCategory: parentCategory ? parentCategory.trim() : null,
     });
 
     res.status(201).json({
@@ -50,7 +51,6 @@ const addCategory = async (req, res) => {
   }
 };
 
-
 const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find();
@@ -61,5 +61,4 @@ const getAllCategories = async (req, res) => {
   }
 };
 
-
-module.exports = {addCategory,getAllCategories}
+module.exports = { addCategory, getAllCategories };

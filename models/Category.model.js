@@ -24,26 +24,12 @@ const categorySchema = new mongoose.Schema({
 
   categoryType: {
     type: String,
-    enum: [
-      // Expense categories
-      "Basic",
-      "Enjoyment",
-      "Healthcare",
-      "Others",
-
-      // Income categories
-      "Salary",
-      "Business",
-      "Investments",
-      "Gifts",
-
-      // Transfer categories
-      "Bank Transfer",
-      "Wallet Transfer",
-      "Credit Card Payment",
-    ],
     required: true,
   },
+  parentCategory: {
+    type:String,
+    default: null,
+  }
 });
 
 module.exports = mongoose.model("Category", categorySchema);
